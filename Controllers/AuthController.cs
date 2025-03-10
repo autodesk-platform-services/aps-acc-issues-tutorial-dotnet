@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
         }
         var tokens = new Tokens
         {
-            PublicToken = request.Cookies["public_token"],
+           // PublicToken = request.Cookies["public_token"],
             InternalToken = request.Cookies["internal_token"],
             RefreshToken = request.Cookies["refresh_token"],
             ExpiresAt = DateTime.Parse(request.Cookies["expires_at"])
@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
         if (tokens.ExpiresAt < DateTime.Now.ToUniversalTime())
         {
             tokens = await aps.RefreshTokens(tokens);
-            response.Cookies.Append("public_token", tokens.PublicToken);
+           // response.Cookies.Append("public_token", tokens.PublicToken);
             response.Cookies.Append("internal_token", tokens.InternalToken);
             response.Cookies.Append("refresh_token", tokens.RefreshToken);
             response.Cookies.Append("expires_at", tokens.ExpiresAt.ToString());
@@ -59,7 +59,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> Callback(string code)
     {
         var tokens = await _aps.GenerateTokens(code);
-        Response.Cookies.Append("public_token", tokens.PublicToken);
+       // Response.Cookies.Append("public_token", tokens.PublicToken);
         Response.Cookies.Append("internal_token", tokens.InternalToken);
         Response.Cookies.Append("refresh_token", tokens.RefreshToken);
         Response.Cookies.Append("expires_at", tokens.ExpiresAt.ToString());
