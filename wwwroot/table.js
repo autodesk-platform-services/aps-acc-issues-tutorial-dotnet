@@ -1,6 +1,6 @@
 const TABLE_TABS = {
     ISSUES: {
-        REQUEST_URL: '/api/ACCIssues/issues',
+        REQUEST_URL: '/api/issues/issues',
         TAB_NAME: 'ISSUES',
         VISIBILITY: true,
         IMPORT_ATTRIBUTES_KEYS: [
@@ -23,17 +23,17 @@ const TABLE_TABS = {
         'VISIBILITY': false
     },
     'ISSUE_SUBTYPES': {
-        'REQUEST_URL': '/api/ACCIssues/subtypes',
+        'REQUEST_URL': '/api/issues/subtypes',
         'TAB_NAME': 'SUBTYPES',
         'VISIBILITY': false
     },
     'ISSUE_ROOTCAUSES': {
-        'REQUEST_URL': '/api/ACCIssues/rootcauses',
+        'REQUEST_URL': '/api/issues/rootcauses',
         'TAB_NAME': 'ROOT_CAUSES',
         'VISIBILITY': false
     },
     'ISSUE_CUSTOM_ATTRIBUTES_DEFS': {
-        'REQUEST_URL': '/api/ACCIssues/customAttDefs',
+        'REQUEST_URL': '/api/issues/customAttDefs',
         'TAB_NAME': 'CUSTOM_ATTRIBUTES_DEFS',
         'VISIBILITY': false
     }
@@ -71,11 +71,15 @@ class Table {
         this.#accountId = accountId ? accountId : this.#accountId;
         this.#projectId = accountId || projectId ? projectId : this.#projectId;
         const url = TABLE_TABS[this.#tabKey].REQUEST_URL;
+
+
+        
         const data = {
             'accountId': this.#accountId,
             'projectId': this.#projectId
         }
         try {
+           
             const response = await axios.get(url, { params: data });
             this.#dataSet = response.data;
         } catch (err) {
@@ -212,7 +216,7 @@ class Table {
 
     importFromCSV = async () => {
         if (TABLE_TABS[this.#tabKey].TAB_NAME != 'ISSUES') {
-            alert('only issue is supported to be created/modified!Please active ISSUES table firstly!');
+            alert('only issue is supported to be created/modified!Please activate ISSUES table first!');
             return;
         }
         let input = document.createElement('input');
@@ -233,7 +237,7 @@ class Table {
                         const import_attributes_keys = TABLE_TABS[this.#tabKey].IMPORT_ATTRIBUTES_KEYS;
                         let requestDataList = []; 
                        
-                        for(let i=1;i<rows.length;i++){
+                        for(let i=1;i<rows.length -1;i++){
                             // Split each row by commas to get each cell
                             const cells = rows[i].split(',');
                             let jsonItem = {};
@@ -265,8 +269,8 @@ class Table {
                        
 
                         const data = {
-                            'accountId':'489c5e7a-c6c0-4212-81f3-3529a621210b', //this.#accountId,
-                            'projectId':'854c194f-05b3-4117-b926-69fa36c33c0c', //this.#projectId,
+                            'accountId': this.#accountId, //this.#accountId,
+                            'projectId':this.#projectId, //this.#projectId,
                             'data': requestDataList
                         }
                         

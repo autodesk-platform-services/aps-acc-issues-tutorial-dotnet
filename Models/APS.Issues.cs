@@ -26,6 +26,9 @@ public partial class APS
         return allIssues;
     }
 
+    // Issue Settings
+
+    //get issue sub types setting
     public async Task<IEnumerable<dynamic>> GetIssueSubTypes(string projectId, Tokens tokens)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
@@ -47,6 +50,7 @@ public partial class APS
         return allSubIssueTypes;
     }
 
+    //get issue root causes setting
     public async Task<IEnumerable<dynamic>> GetIssueRootcauses(string projectId, Tokens tokens)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
@@ -68,6 +72,7 @@ public partial class APS
         return allRootcauses;
     }
 
+    //get custom attributes definitions
     public async Task<IEnumerable<dynamic>> GetIssueCustomAttDefs(string projectId, Tokens tokens)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
@@ -113,13 +118,8 @@ public partial class APS
                     Status =status, 
                     IssueSubtypeId = issue.IssueSubtypeId,
                     DueDate =issue.DueDate,
-
-                    //problems with the two attriubtes
-                    //checking with SDK team
-
-                    //AssignedTo =issue.AssignedTo,
-                    //AssignedToType = AssignedToType.User,
-
+                    AssignedTo = issue.AssignedTo,
+                    AssignedToType = AssignedToType.User,
                     RootCauseId = issue.RootCauseId,
                     Published = issue.Published
                 };  
