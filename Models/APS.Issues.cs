@@ -90,6 +90,7 @@ public partial class APS
         return allCustomAttDefs;
     }
 
+    //create pr modify issues
     public async Task<TaskRes> CreateOrModifyACCIssues(string projectId, Tokens tokens, JArray body)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
@@ -142,6 +143,14 @@ public partial class APS
         return taskRes;
 
     } 
+
+    //get user permission in Issue
+    public async Task<Autodesk.Construction.Issues.Model.User> GetIssueUserProfile(string projectId, Tokens tokens)
+    {
+        IssuesClient issueClient = new IssuesClient(_SDKManager);
+        var userInfo = await issueClient.GetUserProfileAsync(projectId, accessToken: tokens.InternalToken);
+        return userInfo;
+    }
      
     public class TaskRes
     {

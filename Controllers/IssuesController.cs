@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Autodesk.Construction.Issues.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -90,6 +91,20 @@ public class IssuesController : ControllerBase
 
         return Ok(new {created = status.created ,modified = status.modified,failed = status.failed  });
     }
+
+     [HttpGet("issueUserProfile")]
+    public async Task<ActionResult<string>> IssueUserProfile(string projectId)
+    {
+        var tokens = await AuthController.PrepareTokens(Request, Response, _aps);
+        if (tokens == null)
+        {
+            return Unauthorized();
+        }
+        var list = new List<User>(); //to feed the table view of client side. build a dummy json array.
+        var userInfo = await _aps.GetIssueUserProfile(Request.Query["projectId"], tokens);
+        list.Add(userInfo);
+        return JsonConvert.SerializeObject(list);
+    } 
 
 
 }

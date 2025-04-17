@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
- 
+
 
 public class Startup
 {
@@ -20,15 +21,17 @@ public class Startup
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
-    { 
+    {
+        services.AddControllers().AddNewtonsoftJson(options=>
+           // no effect with serialization. why??
+           {options.SerializerSettings.NullValueHandling = NullValueHandling.Include;}
+        );
 
-        services.AddControllers().AddNewtonsoftJson();
-     
         var clientID = Configuration["APS_CLIENT_ID"];
         var clientSecret = Configuration["APS_CLIENT_SECRET"];
         var callbackURL = Configuration["APS_CALLBACK_URL"];
         if (string.IsNullOrEmpty(clientID) || string.IsNullOrEmpty(clientSecret) || string.IsNullOrEmpty(callbackURL))
-        {   
+        {
             throw new ApplicationException("Missing required environment variables APS_CLIENT_ID, APS_CLIENT_SECRET, or APS_CALLBACK_URL.");
         }
         services.AddSingleton(new APS(clientID, clientSecret, callbackURL));
