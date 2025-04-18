@@ -1,6 +1,4 @@
-using System;
 using Autodesk.Authentication.Model;
-using System.Collections.Generic;
 using Autodesk.SDKManager;
 
 public class Tokens

@@ -1,12 +1,6 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Autodesk.Construction.Issues;
 using Autodesk.Construction.Issues.Model;
-using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using Autodesk.DataManagement.Model;
+using Newtonsoft.Json.Linq; 
 
 public partial class APS
 {

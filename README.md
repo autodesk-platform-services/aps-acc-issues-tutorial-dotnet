@@ -16,7 +16,7 @@ given ACC project. This application renders these data in a tabular view. The da
 file easily. With the data from a CSV, the application demos the scenario that imports them to create new issues or modify the existing issues.
  
 
-![thumbnail](thumbnail.png)
+![thumbnail](thumbnail.PNG)
 
 ## Development
 

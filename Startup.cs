@@ -22,10 +22,7 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers().AddNewtonsoftJson(options=>
-           // no effect with serialization. why??
-           {options.SerializerSettings.NullValueHandling = NullValueHandling.Include;}
-        );
+        services.AddControllers().AddNewtonsoftJson();
 
         var clientID = Configuration["APS_CLIENT_ID"];
         var clientSecret = Configuration["APS_CLIENT_SECRET"];

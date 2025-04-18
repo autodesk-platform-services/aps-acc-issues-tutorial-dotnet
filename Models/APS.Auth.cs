@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Autodesk.Authentication;
 using Autodesk.Authentication.Model;
 
