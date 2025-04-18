@@ -73,6 +73,11 @@ file easily. With the data from a CSV, the application demos the scenario that i
     
     > the status of created/modified/failed are tracked and will be printed out in the browser console after the process. 
 
+## Limitations
+ - document issues (pushpin issue) is not demoed in this version
+ - The sample doesn't cover all the supported fields for creating or updating issues.
+ - values that are complex objects (such as arrays or JSON objects) are not saved to the CSV file. Th value is marked as _Complicated Objects_
+   
 ## Troubleshooting
 
 Please contact us via https://aps.autodesk.com/en/support/get-help.
@@ -81,3 +86,6 @@ Please contact us via https://aps.autodesk.com/en/support/get-help.
 
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 Please see the [LICENSE](LICENSE) file for more details.
+
+## Change Log
+- April 18, 2025: First version
