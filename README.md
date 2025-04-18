@@ -60,24 +60,13 @@ file easily. With the data from a CSV, the application demos the scenario that i
  4. ensure the issue tab is activated, click the toolbar button of table view, it will ask to select a csv file. Then process the records accordingly. Finally, the table view will be refreshed with the updated issues.
     
     > It is strongly recommended to use the same pattern of the csv that is exported in the previous function (__Export Issue Records__). 
-
     > To add new issue, leave the column **id** empty
-
     > To modify the existing issue, keep the column **id** with the issue id, update other fields with new values.
-
-    > A few fields are required when working with creating issues(POST). A few fields are supported when working with modifying issues (PATCH). Please check API references for more details.     > to make it clearer, this application narrow down with [some supported fields](https://github.com/xiaodongliang/aps-acc-issues-tutorial-nodejs/blob/main/wwwroot/table.js#L6).
-
+    > A few fields are required when working with creating issues(POST). A few fields are supported when working with modifying issues (PATCH). Please check API references for more details.
+    > to make it clearer, this application narrow down with [some supported fields](wwwroot/table.js#L6-L16).
     > the row number of the records is not used with these scenarios, but will be used when tracking the status. 
-
     > the status of created/modified/failed are tracked and will be printed out in the browser console after the process. 
 
-## Limitations
- - not all supported fields of creating issue or modifying issues are demoed
- - to read value of csv, each cell is parsed by comma (,) but if the value itself contains comma, it would cause problem. So you may need to design the code more deliberately with your requirement. 
- - values of complicated objects are not saved to csv. you could simplify the object to individual values for working with csv.
- - the info of the logged user is not shown up. you could use GET: User/Me to fetch it
- - rate limit
- 
 ## Troubleshooting
 
 Please contact us via https://aps.autodesk.com/en/support/get-help.
