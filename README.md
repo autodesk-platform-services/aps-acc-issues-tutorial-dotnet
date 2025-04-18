@@ -59,12 +59,18 @@ file easily. With the data from a CSV, the application demos the scenario that i
  3. click this project, the application will start to dump the issue data. Finally it renders the data in the table view.
  4. ensure the issue tab is activated, click the toolbar button of table view, it will ask to select a csv file. Then process the records accordingly. Finally, the table view will be refreshed with the updated issues.
     
-    > It is strongly recommended to use the same pattern of the csv that is exported in the previous function (__Export Issue Records__). 
+    > It is strongly recommended to use the same pattern of the csv that is exported in the previous function (__Export Issue Records__).
+    
     > To add new issue, leave the column **id** empty
+    
     > To modify the existing issue, keep the column **id** with the issue id, update other fields with new values.
+    
     > A few fields are required when working with creating issues(POST). A few fields are supported when working with modifying issues (PATCH). Please check API references for more details.
+    
     > to make it clearer, this application narrow down with [some supported fields](wwwroot/table.js#L6-L16).
-    > the row number of the records is not used with these scenarios, but will be used when tracking the status. 
+    
+    > the row number of the records is not used with these scenarios, but will be used when tracking the status.
+    
     > the status of created/modified/failed are tracked and will be printed out in the browser console after the process. 
 
 ## Troubleshooting
