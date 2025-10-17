@@ -33,19 +33,19 @@ file easily. With the data from a CSV, the application demos the scenario that i
 
 - Clone this repository
 - Install dependencies: `dotnet restore`
-- Setup environment variables:
+- Setup environment variables. 
   - `APS_CLIENT_ID` - your APS application client ID
   - `APS_CLIENT_SECRET` - your APS application client secret
   - `APS_CALLBACK_URL` - URL for your users to be redirected to after they successfully log in with their Autodesk account
     - For local development, the callback URL is `http://localhost:8080/api/auth/callback`
     - For applications deployed to a custom domain, the callback URL is `http://<your-domain>/api/auth/callback` or `https://<your-domain>/api/auth/callback`
     - Do not forget to update the callback URL for your application in https://aps.autodesk.com/myapps as well
+- Input these variables to appsettings.json
 - Run the server: `dotnet run`
-
+- If Debugging the application, input the variables to appsettings.Development.json and start debug.
 > When using [Visual Studio Code](https://code.visualstudio.com), you can specify the env. variables listed above in a _.env_ file in this folder, and run & debug the application directly from the editor.
 
 ## Main Functionalities
-
 - Export Issue Records: The application can extract all issues data from a project and render them in a table view. It also allows the user to save as the data to a csv file
  1. login with a valid user of this ACC project.
  2. in the left tree panel, nagivate to the project to inspect
