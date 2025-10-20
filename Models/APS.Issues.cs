@@ -1,6 +1,9 @@
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Autodesk.Construction.Issues;
 using Autodesk.Construction.Issues.Model;
-using Newtonsoft.Json.Linq; 
+using Newtonsoft.Json.Linq;
 
 public partial class APS
 {
@@ -12,7 +15,7 @@ public partial class APS
         var totalResult = 0;
         do
         {
-            var issues = await issueClient.GetIssuesAsync(projectId, accessToken: tokens.InternalToken,offset:offset);
+            var issues = await issueClient.GetIssuesAsync(projectId, accessToken: tokens.InternalToken, offset: offset);
             allIssues.AddRange(issues.Results);
             offset += (int)issues.Pagination.Limit;
             totalResult = (int)issues.Pagination.TotalResults;
@@ -31,7 +34,7 @@ public partial class APS
         var totalResult = 0;
         do
         {
-            var issueTypes = await issueClient.GetIssuesTypesAsync(projectId, accessToken: tokens.InternalToken, include: "subtypes",offset:offset);
+            var issueTypes = await issueClient.GetIssuesTypesAsync(projectId, accessToken: tokens.InternalToken, include: "subtypes", offset: offset);
             List<IssueTypeResultsSubtypes> eachPage = issueTypes.Results
             .Where(type => type.Subtypes != null && type.Subtypes.Any()) // Skip type with empty subtypes
             .SelectMany(type => type.Subtypes)  // Flatten the non-empty subtypes lists
@@ -53,7 +56,7 @@ public partial class APS
         var totalResult = 0;
         do
         {
-            var categories = await issueClient.GetRootCauseCategoriesAsync(projectId, accessToken: tokens.InternalToken, include: "rootcauses",offset:offset);
+            var categories = await issueClient.GetRootCauseCategoriesAsync(projectId, accessToken: tokens.InternalToken, include: "rootcauses", offset: offset);
             List<IssueRootCauseResultsRootCauses> eachPage = categories.Results
             .Where(type => type.RootCauses != null && type.RootCauses.Any()) // Skip categories with empty rootcasues lists
             .SelectMany(type => type.RootCauses)  // Flatten the non-empty rootcasues lists
@@ -75,7 +78,7 @@ public partial class APS
         var totalResult = 0;
         do
         {
-            var attdefs = await issueClient.GetAttributeDefinitionsAsync(projectId, accessToken: tokens.InternalToken,offset:offset);
+            var attdefs = await issueClient.GetAttributeDefinitionsAsync(projectId, accessToken: tokens.InternalToken, offset: offset);
 
             allCustomAttDefs.AddRange(attdefs.Results);
             offset += (int)attdefs.Pagination.Limit;
@@ -88,55 +91,71 @@ public partial class APS
     public async Task<TaskRes> CreateOrModifyACCIssues(string projectId, Tokens tokens, JArray body)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
- 
-        var taskRes = new TaskRes(){
-            created=new List<succeded>(),
-            modified=new List<succeded>(),
-            failed=new List<failed>()
+
+        var taskRes = new TaskRes()
+        {
+            created = new List<succeded>(),
+            modified = new List<succeded>(),
+            failed = new List<failed>()
         };
 
-        foreach (JToken eachItem in body){
-            Autodesk.Construction.Issues.Model.Results issue = 
-                 eachItem.ToObject<Autodesk.Construction.Issues.Model.Results>(); 
+        foreach (JToken eachItem in body)
+        {
+            Autodesk.Construction.Issues.Model.Results issue =
+                 eachItem.ToObject<Autodesk.Construction.Issues.Model.Results>();
 
-            try{ 
-                //some attributes are enum with IssuePayload
-                //value of Autodesk.Construction.Issues.Model.Results  is string
-                //need to convert to enum.
-                Status status = (Status)Enum.Parse(typeof(Status),CapitalizeFirstLetter(issue.Status));
-                AssignedToType assignedToType = (AssignedToType)Enum.Parse(typeof(AssignedToType),CapitalizeFirstLetter(issue.AssignedToType));
+            try
+            { 
+                //build issue payload with non-null properties only
+                var issuePayload = new IssuePayload(); 
+                var inputDataProperties = typeof(Autodesk.Construction.Issues.Model.Results).GetProperties();
+                var issuePayloadProperties = typeof(IssuePayload).GetProperties();
 
-                IssuePayload issuePayload = new IssuePayload
+                foreach (var property in inputDataProperties)
                 {
-                    Title = issue.Title,
-                    Description =issue.Description,
-                    Status =status, 
-                    IssueSubtypeId = issue.IssueSubtypeId,
-                    DueDate =issue.DueDate,
-                    AssignedTo = issue.AssignedTo,
-                    AssignedToType = AssignedToType.User,
-                    RootCauseId = issue.RootCauseId,
-                    Published = issue.Published
-                };  
+                    var value = property.GetValue(issue);
+                    if (value != null)
+                    {
+                        // Find the corresponding property in the IssuePayload class
+                        var matchingProperty = issuePayloadProperties.FirstOrDefault(p => p.Name == property.Name && p.CanWrite);
 
-                if ((string)eachItem["id"] == null || (string)eachItem["id"] =="" ){
+                        if (matchingProperty != null)
+                        {
+                            // If the property is an enum, parse the string value to the enum type
+                            if (matchingProperty.PropertyType.IsEnum)
+                            {
+                                var enumValue = Enum.Parse(matchingProperty.PropertyType, value.ToString(), true);
+                                matchingProperty.SetValue(issuePayload, enumValue);
+                            }
+                            else
+                            {
+                                matchingProperty.SetValue(issuePayload, value);
+                            }
+                        }
+                    }
+                } 
+
+                if ((string)eachItem["id"] == null || (string)eachItem["id"] == "")
+                {
                     //create new issue
                     Issue res = await issueClient.CreateIssueAsync(projectId, issuePayload, accessToken: tokens.InternalToken);
-                    taskRes.created.Add(new succeded { id = res.Id, csvRowNum =(string) eachItem["csvRowNum"] });
-                }else{
+                    taskRes.created.Add(new succeded { id = res.Id, csvRowNum = (string)eachItem["csvRowNum"] });
+                }
+                else
+                {
                     //modify issue
                     Issue res = await issueClient.PatchIssueDetailsAsync(projectId, issue.Id, issuePayload, accessToken: tokens.InternalToken);
-                    taskRes.modified.Add(new succeded { id = res.Id, csvRowNum =(string) eachItem["csvRowNum"] });
+                    taskRes.modified.Add(new succeded { id = res.Id, csvRowNum = (string)eachItem["csvRowNum"] });
                 }
             }
             catch (Exception e)
             {
-               taskRes.failed.Add(new failed { csvRowNum =(string) eachItem["csvRowNum"], reason=e.ToString() });
+                taskRes.failed.Add(new failed { csvRowNum = (string)eachItem["csvRowNum"], reason = e.ToString() });
             }
-        }  
+        }
         return taskRes;
 
-    } 
+    }
 
     //get user permission in Issue
     public async Task<Autodesk.Construction.Issues.Model.User> GetIssueUserProfile(string projectId, Tokens tokens)
@@ -145,7 +164,7 @@ public partial class APS
         var userInfo = await issueClient.GetUserProfileAsync(projectId, accessToken: tokens.InternalToken);
         return userInfo;
     }
-     
+
     public class TaskRes
     {
         public List<succeded> created { get; set; }
@@ -170,7 +189,7 @@ public partial class APS
         {
             return input;  // Return the input if it's null or empty
         }
-        
+
         // Capitalize the first letter and make the rest lowercase
         return char.ToUpper(input[0]) + input.Substring(1).ToLower();
     }
