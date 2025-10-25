@@ -34,7 +34,7 @@ public class IssuesController : ControllerBase
             return Unauthorized();
         }
 
-        var issues = await _aps.GetIssues(Request.Query["projectId"], tokens);  
+        var issues = await _aps.GetIssues(projectId, tokens);  
         return JsonConvert.SerializeObject(issues,settings);
     }
 
@@ -48,7 +48,7 @@ public class IssuesController : ControllerBase
             return Unauthorized();
         }
 
-        var subtypes = await _aps.GetIssueSubTypes(Request.Query["projectId"], tokens);
+        var subtypes = await _aps.GetIssueSubTypes(projectId, tokens);
         return JsonConvert.SerializeObject(subtypes,settings);
     }
 
@@ -61,7 +61,7 @@ public class IssuesController : ControllerBase
             return Unauthorized();
         }
 
-        var rootcauses = await _aps.GetIssueRootcauses(Request.Query["projectId"], tokens);
+        var rootcauses = await _aps.GetIssueRootcauses(projectId, tokens);
         return JsonConvert.SerializeObject(rootcauses,settings);
     }
 
@@ -74,7 +74,7 @@ public class IssuesController : ControllerBase
             return Unauthorized();
         }
 
-        var attdefs = await _aps.GetIssueCustomAttDefs(Request.Query["projectId"], tokens);
+        var attdefs = await _aps.GetIssueCustomAttDefs(projectId, tokens);
         return JsonConvert.SerializeObject(attdefs,settings);
     }
 
@@ -105,7 +105,7 @@ public class IssuesController : ControllerBase
             return Unauthorized();
         }
         var list = new List<User>(); //to feed the table view of client side. build a dummy json array.
-        var userInfo = await _aps.GetIssueUserProfile(Request.Query["projectId"], tokens);
+        var userInfo = await _aps.GetIssueUserProfile(projectId, tokens);
         list.Add(userInfo);
         return JsonConvert.SerializeObject(list,settings);;
     }

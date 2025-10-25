@@ -24,8 +24,8 @@ public class AdminController : ControllerBase
             return Unauthorized();
         }
 
-        var projects = await _aps.GetProjectUsersACC(Request.Query["projectId"], tokens);
-        return JsonConvert.SerializeObject(projects);
+        var projectUsers = await _aps.GetProjectUsersACC(projectId, tokens);
+        return JsonConvert.SerializeObject(projectUsers);
     } 
 
 }

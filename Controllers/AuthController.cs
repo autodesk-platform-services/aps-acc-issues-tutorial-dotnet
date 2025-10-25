@@ -70,17 +70,5 @@ public class AuthController : ControllerBase
         }
         var profile = await _aps.GetUserProfile(tokens);
         return Ok(new { name = profile.Name });
-    }
-
-    [HttpGet("token")]
-    public async Task<ActionResult> GetPublicToken()
-    {
-        var tokens = await PrepareTokens(Request, Response, _aps);
-        if (tokens == null)
-        {
-            return Unauthorized();
-        }
-        var expiresIn = Math.Floor((tokens.ExpiresAt - DateTime.Now.ToUniversalTime()).TotalSeconds);
-        return Ok(new { access_token = tokens.PublicToken, expires_in = expiresIn });
-    }
+    } 
 }

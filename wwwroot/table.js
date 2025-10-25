@@ -124,6 +124,7 @@ class Table {
                     field: key,
                     title: key,
                     align: "left", 
+                    width:500,
                     formatter: (value) => {
 
                         const jsonString = JSON.stringify(value, null, 2);
@@ -131,7 +132,7 @@ class Table {
                         return `<pre style="max-height: 120px; 
                                 max-width: 500px; overflow: auto; 
                                 white-space: pre-wrap;  margin: 0;word-break: break-word;">
-                                ${this.escapeHtml(jsonString)}</pre>`;
+                                ${jsonString}</pre>`;
                     }
                 })
             } else {
@@ -317,14 +318,6 @@ class Table {
         return format.replace(/YYYY|MM|DD/g, (match) => replacements[match]);
     }
 
-    escapeHtml(str) {
-        return str
-            .replace(/&/g, "&amp;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
-    }
 }
 
 export async function refreshTable(accountId = null, projectId = null) {
