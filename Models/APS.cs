@@ -3,8 +3,7 @@ using Autodesk.SDKManager;
 
 public class Tokens
 {
-    public string? InternalToken;
-    public string? PublicToken;
+    public string? InternalToken; 
     public string? RefreshToken;
     public DateTime ExpiresAt;
 }

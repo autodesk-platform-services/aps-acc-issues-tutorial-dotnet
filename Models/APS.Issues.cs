@@ -12,7 +12,7 @@ public partial class APS
         var totalResult = 0;
         do
         {
-            var issues = await issueClient.GetIssuesAsync(projectId, accessToken: tokens.InternalToken, offset: offset);
+            var issues = await issueClient.GetIssuesAsync(projectId,accessToken: tokens.InternalToken, offset: offset);
             Console.WriteLine($"Fetched {issues.Results.Count} issues from index {offset} record.");
 
             allIssues.AddRange(issues.Results);
@@ -29,7 +29,7 @@ public partial class APS
     public async Task<IEnumerable<dynamic>> GetIssueSubTypes(string projectId, Tokens tokens)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
-        var allSubIssueTypes = new List<TypesPageResultsSubtypes>();
+        var allSubIssueTypes = new List<IssueTypeSubtypes>();
         var offset = 0;
         var totalResult = 0;
         do
@@ -38,7 +38,7 @@ public partial class APS
 
             Console.WriteLine($"Fetched {issueTypes.Results.Count}  sub types from index {offset} record");
 
-            List<TypesPageResultsSubtypes> eachPage = issueTypes.Results
+            List<IssueTypeSubtypes> eachPage = issueTypes.Results
             .Where(type => type.Subtypes != null && type.Subtypes.Any()) // Skip type with empty subtypes
             .SelectMany(type => type.Subtypes)  // Flatten the non-empty subtypes lists
             .ToList();
@@ -55,13 +55,13 @@ public partial class APS
     public async Task<IEnumerable<dynamic>> GetIssueRootcauses(string projectId, Tokens tokens)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
-        var allRootcauses = new List<RootCauseCategoriesPageResultsRootCauses>();
+        var allRootcauses = new List<RootCauseCategoryRootCauses>();
         var offset = 0;
         var totalResult = 0;
         do
         {
             var categories = await issueClient.GetRootCauseCategoriesAsync(projectId, accessToken: tokens.InternalToken, include: "rootcauses", offset: offset);
-            List<RootCauseCategoriesPageResultsRootCauses> eachPage = categories.Results
+            List<RootCauseCategoryRootCauses> eachPage = categories.Results
             .Where(type => type.RootCauses != null && type.RootCauses.Any()) // Skip categories with empty rootcasues lists
             .SelectMany(type => type.RootCauses)  // Flatten the non-empty rootcasues lists
             .ToList();
@@ -80,7 +80,7 @@ public partial class APS
     public async Task<IEnumerable<dynamic>> GetIssueCustomAttDefs(string projectId, Tokens tokens)
     {
         IssuesClient issueClient = new IssuesClient(_SDKManager);
-        var allCustomAttDefs = new List<AttrDefinitionPageResults>();
+        var allCustomAttDefs = new List<AttrDefinition>();
         var offset = 0;
         var totalResult = 0;
         do
