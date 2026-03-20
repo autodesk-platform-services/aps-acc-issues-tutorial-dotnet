@@ -23,7 +23,7 @@ file easily. With the data from a CSV, the application demos the scenario that i
 ### Prerequisites
 
 - [APS credentials](https://aps.autodesk.com/en/docs/oauth/v2/tutorials/create-app)
-- [AForma for Construction](https://fieldofviewblog.wordpress.com/2017/08/31/bim-360-acc-account-for-development/)
+- [Autodesk Forma](https://fieldofviewblog.wordpress.com/2017/08/31/bim-360-acc-account-for-development/)
 - Provisioned access to [Autodesk Forma](https://tutorials.autodesk.io/#provision-access-in-other-products)
 - [.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - Terminal (for example, [Windows Command Prompt](https://en.wikipedia.org/wiki/Cmd.exe) or [macOS Terminal](https://support.apple.com/guide/terminal/welcome/mac))
